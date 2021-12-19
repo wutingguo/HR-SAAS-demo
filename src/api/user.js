@@ -1,24 +1,20 @@
-import request from '@/utils/request'
+import http from '@/utils/request'
 
-export function login(data) {
-  return request({
-    url: '/vue-admin-template/user/login',
+/**
+ *
+ *用于登录
+ */
+export const reqLogin = (data) => {
+  return http({
     method: 'post',
+    url: '/sys/login',
     data
   })
 }
-
-export function getInfo(token) {
-  return request({
-    url: '/vue-admin-template/user/info',
-    method: 'get',
-    params: { token }
-  })
-}
-
-export function logout() {
-  return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
-  })
-}
+/**
+ * 用于获取用户的名字等信息
+ */
+export const reqGetProfile = () => http({
+  method: 'post',
+  url: '/sys/profile'
+})
