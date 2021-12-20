@@ -1,4 +1,4 @@
-import { reqGetProfile, reqLogin } from '@/api/user'
+import { reqGetProfile, reqGetUserInfo, reqLogin } from '@/api/user'
 import { getToken, setToken } from '@/utils/auth'
 // import { reject, resolve } from 'core-js/fn/promise'
 const state = {
@@ -28,10 +28,19 @@ const actions = {
   },
   getProfile(context) {
     return new Promise((resolve, reject) => {
-      reqGetProfile().then((res) => {
+      reqGetProfile().then(({ data: data1 }) => {
         // console.log(res)
-        context.commit('setProfile', res.data)
-        resolve(res)
+        reqGetUserInfo(data1.userId).then(({ data: data2 }) => {
+          console.log(data2, 'data2')
+          console.log(data1, 'kanid')
+          const obj = {
+            ...data1,
+            ...data2
+          }
+          context.commit('setProfile', obj)
+        })
+
+        resolve(data1)
       }).catch(() => {
         reject()
       })

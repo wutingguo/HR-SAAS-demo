@@ -39,8 +39,8 @@ module.exports = {
     // 解决跨域 //代理服务器
     proxy: {
       '/api': {
-        // target: 'http://ihrm-java.itheima.net',
-        target: 'http://192.168.141.87:3000'
+        target: 'http://ihrm-java.itheima.net'
+        // target: 'http://192.168.141.87:3000'
       }
     }
   },
