@@ -115,3 +115,16 @@ export function param2Obj(url) {
   })
   return obj
 }
+export const trasfList2Tree = (list, term) => {
+  const arr = []
+  list.forEach(item => {
+    if (item.pid === term) {
+      const result = trasfList2Tree(list, item.id)
+      if (result.length > 0) {
+        item.children = result
+      }
+      arr.push(item)
+    }
+  })
+  return arr
+}

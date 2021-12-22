@@ -16,7 +16,7 @@
       <el-dropdown class="avatar-container" trigger="click">
 
         <div class="avatar-wrapper">
-          <img :src="staffPhoto" class="user-avatar">
+          <img v-defImg="defaultImg" :src="staffPhoto" class="user-avatar">
           <!-- <span class="name">{{ $store.state.user.userInfo.username }}</span> -->
           <!-- <span class="name">{{ $store.getters.name }}</span> -->
           <span class="name">{{ name }}</span>
@@ -40,7 +40,7 @@
           </a>
 
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">退出登录</span>
+            <span v-color="color" style="display:block;">退出登录</span>
           </el-dropdown-item>
 
         </el-dropdown-menu>
@@ -56,6 +56,12 @@ import Hamburger from '@/components/Hamburger'
 export default {
   components: {
     Hamburger
+  },
+  data() {
+    return {
+      defaultImg: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2944476239,2235255584&fm=26&gp=0.jpg',
+      color: 'red'
+    }
   },
   computed: {
     ...mapGetters([
@@ -74,9 +80,9 @@ export default {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
-    async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    logout() {
+      this.$store.dispatch('user/outLogin')
+      this.$router.push('/login')
     }
   }
 }

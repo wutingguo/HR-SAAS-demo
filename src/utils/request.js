@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store'
+import router from '@/router'
 
 // process.env=>>获取环境变量
 const http = axios.create({
@@ -31,7 +32,14 @@ http.interceptors.response.use(function(response) {
   return res
 }, function(error) {
   // 对响应错误做点什么
-  Message.error(error.message)
+  if (error.response.status === 401 && error.response.data.code === 10002) {
+    Message.error('你的登录过期啦, 请重新登录')
+    store.dispatch('user/outLogin')
+    router.push('/login')
+  } else {
+    // 将来服务器错误, 提示一下用户
+    Message.error(error.message)
+  }
   return Promise.reject(error)
 })
 

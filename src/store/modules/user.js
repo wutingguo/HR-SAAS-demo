@@ -1,5 +1,5 @@
 import { reqGetProfile, reqGetUserInfo, reqLogin } from '@/api/user'
-import { getToken, setToken } from '@/utils/auth'
+import { getToken, removeToken, setToken } from '@/utils/auth'
 // import { reject, resolve } from 'core-js/fn/promise'
 const state = {
   token: getToken() || '',
@@ -12,10 +12,17 @@ const mutations = {
   },
   setProfile(state, newInfo) {
     state.userInfo = newInfo
+  },
+  removeToken(state) {
+    state.token = ''
+    removeToken()
+  },
+  removeUserInfo(state) {
+    state.userInfo = ''
   }
 }
 const actions = {
-  getToken(context, data) {
+  login(context, data) {
     return new Promise((resolve, reject) => {
       reqLogin(data).then((res) => {
         // console.log(res, 957)
@@ -45,6 +52,10 @@ const actions = {
         reject()
       })
     })
+  },
+  outLogin(context) {
+    context.commit('removeToken')
+    context.commit('removeUserInfo')
   }
 }
 const getters = {}
