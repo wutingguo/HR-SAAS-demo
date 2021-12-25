@@ -38,16 +38,15 @@ const actions = {
       reqGetProfile().then(({ data: data1 }) => {
         // console.log(res)
         reqGetUserInfo(data1.userId).then(({ data: data2 }) => {
-          console.log(data2, 'data2')
-          console.log(data1, 'kanid')
+          // console.log(data2, 'data2')
+          // console.log(data1, 'kanid')
           const obj = {
             ...data1,
             ...data2
           }
           context.commit('setProfile', obj)
+          resolve(obj)
         })
-
-        resolve(data1)
       }).catch(() => {
         reject()
       })

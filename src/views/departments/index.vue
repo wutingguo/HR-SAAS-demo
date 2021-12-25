@@ -4,7 +4,10 @@
     <div class="app-container">
       <el-card class="tree-card">
         <!-- 用了一个行列布局 -->
-        <TreeTools :data="company" />
+        <TreeTools
+          :data="company"
+          @add="addFn"
+        />
         <!-- 树形结构 -->
         <el-tree :data="departs" default-expand-all>
           <template #default="{data}">
@@ -29,7 +32,9 @@
             <el-input v-model="addForm.code" style="width:80%" placeholder="1-10个字符" />
           </el-form-item>
           <el-form-item label="部门负责人" prop="manager">
-            <el-select v-model="addForm.manager" style="width:80%" placeholder="请选择" />
+            <el-select v-model="addForm.manager" style="width:80%" placeholder="请选择">
+              <!-- <el-option v-for=""></el-option> -->
+            </el-select>
           </el-form-item>
           <el-form-item label="部门介绍" prop="introduce">
             <el-input v-model="addForm.introduce" style="width:80%" placeholder="1-300个字符" type="textarea" :rows="3" />
@@ -63,6 +68,10 @@ export default {
       console.log(flag)
       flag ? callback(new Error('同级部门名已存在')) : callback()
     }
+    const validateCode = (a, value, callback) => {
+      const res = this.departList.some(item => item.code === value)
+      res ? callback(new Error('部门编码重复,请重新输入')) : callback()
+    }
     return {
       departs: [],
       departList: [],
@@ -87,7 +96,8 @@ export default {
         ],
         code: [
           { required: true, message: '部门编码不能为空', trigger: ['blur', 'change'] },
-          { min: 1, max: 10, message: '部门编码只能是1-10位', trigger: ['blur', 'change'] }
+          { min: 1, max: 10, message: '部门编码只能是1-10位', trigger: ['blur', 'change'] },
+          { validator: validateCode, trigger: 'blur' }
         ],
         manager: [
           { required: true, message: '部门负责人不能为空', trigger: ['blur', 'change'] }
@@ -107,6 +117,7 @@ export default {
       const { data: { depts }} = await reqGetDeparment()
       console.log(depts, 'woaini')
       this.departList = depts
+      this.company.id = ''
       // this.departs = depts
       console.log(trasfList2Tree(depts, ''), 8888)
       this.departs = trasfList2Tree(depts, '')

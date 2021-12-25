@@ -20,6 +20,12 @@ if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 
+import component from '@/components'
+Vue.use(component)
+import * as filter from '@/filters'
+Object.keys(filter).forEach((item) => {
+  Vue.filter(item, filter[item])
+})
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
