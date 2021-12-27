@@ -21,3 +21,23 @@ export function reqDelEmployee(id) {
     url: `/sys/user/${id}`
   })
 }
+/**
+ * 用于增加员工
+ * @param {*} form 数据
+ */
+export const reqAddEmployee = (form) => {
+  return request({
+    method: 'post',
+    url: '/sys/user',
+    data: form
+  })
+}
+
+export const reqAddEmployeeBatch = (arr) => {
+  return request({
+    method: 'post',
+    url: '/sys/user/batch',
+    // 这里一般是对象,看后端,也可以是数组
+    data: arr
+  })
+}

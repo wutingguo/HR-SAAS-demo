@@ -1,23 +1,5 @@
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
-
-    <div class="box">123123</div>
-
-    <div>
-      <svg>
-        <use xlink:href="#icon-404" />
-      </svg>
-
-      <svg>
-        <use xlink:href="#icon-edit" />
-      </svg>
-
-      <!-- <svg-icon iconClass="404" /> -->
-      <svg-icon icon-class="404" />
-      <svg-icon icon-class="edit" />
-    </div>
-  </div>
+  <div class="dashboard-container" />
 </template>
 
 <script>
