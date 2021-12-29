@@ -13,6 +13,14 @@ export default {
       name: 'employees', // 命名路由
       component: () => import('@/views/employees'),
       meta: { title: '员工', icon: 'people' } // 路由添加额外的信息
+    },
+    {
+      path: 'detail/:id', // 动态路由参数
+      component: () => import('@/views/employees/detail'),
+      hidden: true,
+      meta: {
+        title: '员工详情'
+      }
     }
   ]
 }
