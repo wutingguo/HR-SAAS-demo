@@ -30,3 +30,19 @@ export const reqGetUserInfo = (id) => {
     url: `/sys/user/${id}`
   })
 }
+
+export const reqGetSimpleUserList = () => http({
+  method: 'get',
+  url: '/sys/user/simple'
+})
+
+export function reqAssignRoles(id, roleIds) {
+  return http({
+    method: 'put',
+    url: '/sys/user/assignRoles',
+    data: {
+      id,
+      roleIds
+    }
+  })
+}

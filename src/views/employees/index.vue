@@ -31,7 +31,7 @@
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button type="text" size="small" @click="handleRoleAssign(row.id)">角色</el-button>
               <el-button type="text" size="small" @click="delFn(row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -50,6 +50,7 @@
         </div>
       </el-card>
       <AddEmployees :show-dialog.sync="showDialog" @add-employees="getUserList" />
+      <AssignRole :user-id="userId" :show-role-dialog.sync="showRoleDialog" />
     </div>
   </div>
 </template>
@@ -57,13 +58,15 @@
 <script>
 import { reqDelEmployee, reqGetUserList } from '@/api/employee'
 import AddEmployees from './components/AddEmployees.vue'
+import AssignRole from './components/AssignRole.vue'
 import obj from '@/constant/employees'
 import dayjs from 'dayjs'
 const { hireType } = obj
 export default {
   name: 'Employees',
   components: {
-    AddEmployees
+    AddEmployees,
+    AssignRole
   },
   data() {
     return {
@@ -72,7 +75,9 @@ export default {
       userList: [],
       total: null,
       loading: false,
-      showDialog: false
+      showDialog: false,
+      userId: null,
+      showRoleDialog: false
     }
   },
   created() {
@@ -171,6 +176,10 @@ export default {
           bookType: 'xlsx' // 文件格式 非必填
         })
       })
+    },
+    handleRoleAssign(id) {
+      this.userId = id
+      this.showRoleDialog = true
     }
   }
 }
