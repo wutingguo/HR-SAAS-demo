@@ -12,7 +12,7 @@
               <el-table-column label="描述" prop="description" />
               <el-table-column label="操作">
                 <template #default="{row}">
-                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button size="small" type="success" @click="assign(row.id)">分配权限</el-button>
                   <el-button size="small" type="primary" @click="editRole(row.id)">编辑</el-button>
                   <el-button size="small" type="danger" @click="delRole(row.id)">删除</el-button>
                 </template>
@@ -68,6 +68,22 @@
           <el-button type="primary" @click="handlChange">确 定</el-button>
         </template>
       </el-dialog>
+      <!-- 分配权限的弹层 -->
+      <el-dialog title="分配权限" :visible="showAssignDialog" @close="closeAssignDialog">
+        <el-tree
+          show-checkbox
+          check-strictly
+          default-expand-all
+          :data="permissionList"
+          :props="{label: 'name'}"
+        />
+        <template #footer>
+          <div style="text-align: right;">
+            <el-button @click="closeAssignDialog">取消</el-button>
+            <el-button type="primary">确定</el-button>
+          </div>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -75,6 +91,8 @@
 <script>
 import { reqAddRole, reqDelRole, reqGetCompanyById, reqGetRoleDetail, reqGetRoleList, reqUpdateRole } from '@/api/setting'
 import { mapState } from 'vuex'
+import { reqGetPermissionList } from '@/api/permission'
+import { trasfList2Tree } from '@/utils'
 export default {
   name: 'Setting',
   data() {
@@ -86,7 +104,9 @@ export default {
       },
       roleList: [],
       total: null,
+      permissionList: [],
       dialogFormVisible: false,
+      showAssignDialog: false,
       roleTitle: '添加角色',
       loading: false,
       form: {
@@ -196,6 +216,15 @@ export default {
       // console.log(data)
       // console.log(this.userInfo.companyId, 4654664888)
       this.companyForm = data
+    },
+    async assign(id) {
+      this.showAssignDialog = true
+      const { data } = await reqGetPermissionList(id)
+      // console.log(data,1640 )
+      this.permissionList = trasfList2Tree(data, '0')
+    },
+    closeAssignDialog() {
+      this.showAssignDialog = false
     }
   }
 }
