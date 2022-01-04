@@ -71,6 +71,8 @@
       <!-- 分配权限的弹层 -->
       <el-dialog title="分配权限" :visible="showAssignDialog" @close="closeAssignDialog">
         <el-tree
+          ref="tree"
+          node-key="id"
           show-checkbox
           check-strictly
           default-expand-all
@@ -80,7 +82,7 @@
         <template #footer>
           <div style="text-align: right;">
             <el-button @click="closeAssignDialog">取消</el-button>
-            <el-button type="primary">确定</el-button>
+            <el-button type="primary" @click="clickAssignSubmit">确定</el-button>
           </div>
         </template>
       </el-dialog>
@@ -89,7 +91,7 @@
 </template>
 
 <script>
-import { reqAddRole, reqDelRole, reqGetCompanyById, reqGetRoleDetail, reqGetRoleList, reqUpdateRole } from '@/api/setting'
+import { reqAddRole, reqDelRole, reqGetCompanyById, reqGetRoleDetail, reqGetRoleList, reqUpdateRole, reqAssignPerm } from '@/api/setting'
 import { mapState } from 'vuex'
 import { reqGetPermissionList } from '@/api/permission'
 import { trasfList2Tree } from '@/utils'
@@ -107,6 +109,7 @@ export default {
       permissionList: [],
       dialogFormVisible: false,
       showAssignDialog: false,
+      roleId: '',
       roleTitle: '添加角色',
       loading: false,
       form: {
@@ -219,12 +222,24 @@ export default {
     },
     async assign(id) {
       this.showAssignDialog = true
+      this.roleId = id
       const { data } = await reqGetPermissionList(id)
       // console.log(data,1640 )
       this.permissionList = trasfList2Tree(data, '0')
+      const { data: { permIds }} = await reqGetRoleDetail(id)
+      console.log(permIds)
+      // 设置树形结构选中(配合node-key)
+      this.$refs.tree.setCheckedKeys(permIds)
     },
     closeAssignDialog() {
       this.showAssignDialog = false
+    },
+    async clickAssignSubmit() {
+      const permIds = this.$refs.tree.getCheckedKeys()
+      const res = await reqAssignPerm(this.roleId, permIds)
+      console.log(res)
+      this.$message.success('分配权限成功')
+      this.closeAssignDialog()
     }
   }
 }

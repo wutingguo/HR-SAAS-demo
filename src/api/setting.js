@@ -51,3 +51,19 @@ export const reqGetCompanyById = (id) => {
     url: `/company/${id}`
   })
 }
+
+/**
+ * 给角色分配权限
+ * @param {*} id 角色id
+ * @param {*} permIds 权限id的数组
+ */
+export function reqAssignPerm(id, permIds) {
+  return http({
+    method: 'put',
+    url: '/sys/role/assignPrem',
+    data: {
+      id,
+      permIds
+    }
+  })
+}
